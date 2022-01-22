@@ -1410,11 +1410,18 @@ end)
 
 addType(tc, "checkbox", "Fling", "fling", false, function(check)
 	local oldBv = nil
+	local queue = false
 	local enabled = false
 
 	local function create(character)
+		if queue then return end
+
+		queue = true
 		repeat task.wait() until character:FindFirstChild("HumanoidRootPart")
 		task.wait(1)
+		queue = false
+
+		if not typeData.fling then return end			
 
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 
