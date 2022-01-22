@@ -1407,7 +1407,7 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 
 	local function create(character)
 		repeat task.wait() until character:FindFirstChild("HumanoidRootPart")
-		task.wait()
+		task.wait(1)
 
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 
