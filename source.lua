@@ -891,9 +891,16 @@ local sc = localPages.settings.container
 
 addType(cc, "checkbox", "Fly", "flying", false, function()
 	local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+	local queue = false
 	local vl = {}
 
 	local function fly(character)
+		if queue then return end
+
+		queue = true
+		repeat task.wait() until typeData.flying
+		queue = false
+
 		task.wait(1)
 
 		local root = character:FindFirstChild("HumanoidRootPart")
