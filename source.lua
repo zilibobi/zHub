@@ -41,6 +41,8 @@ local function tween(obj, info, goal, yield)
 end
 
 local screen = Instance.new("ScreenGui")
+screen.LayoutOrder = math.huge
+screen.OnTopOfCoreBlur = true
 screen.IgnoreGuiInset = true
 screen.ResetOnSpawn = false
 
@@ -1110,7 +1112,7 @@ end)
 
 addType(cc, "checkbox", "Inf Jump", "infJump", false)
 
-addType(cc, "slider", "Jump Power", "jumpPower", { start = 50, min = 0, max = 350 }, function()
+addType(cc, "slider", "Jump Power", "jumpPower", { start = workspace.Gravity / 4, min = 0, max = 350 }, function()
 	local lastJump = 0
 
 	UserInputService.JumpRequest:Connect(function()
