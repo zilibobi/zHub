@@ -41,7 +41,7 @@ local function tween(obj, info, goal, yield)
 end
 
 local screen = Instance.new("ScreenGui")
-screen.LayoutOrder = math.huge
+screen.DisplayOrder = math.huge
 screen.OnTopOfCoreBlur = true
 screen.IgnoreGuiInset = true
 screen.ResetOnSpawn = false
