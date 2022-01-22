@@ -1,6 +1,7 @@
 ------------------------- zHub v. 1.0 ------------------------
 ------ Creative Commons BY-NC 4.0 International License ------
 -- https://creativecommons.org/licenses/by-nc/4.0/legalcode --
+-------------- https://github.com/zilibobi/zHub --------------
 ------------------------- by zilibobi ------------------------
 
 if _G.zHubLoaded then
