@@ -1446,11 +1446,10 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 				oldBv = nil
 
 				typeData.noclip = false
-
-				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
-				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 			else
 				enabled = true
+				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
 				create(character)
 			end
 		end
