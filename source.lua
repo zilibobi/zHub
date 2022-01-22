@@ -1112,7 +1112,7 @@ end)
 
 addType(cc, "checkbox", "Inf Jump", "infJump", false)
 
-addType(cc, "slider", "Jump Power", "jumpPower", { start = workspace.Gravity / 4, min = 0, max = 350 }, function()
+addType(cc, "slider", "Jump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
 	local lastJump = 0
 
 	UserInputService.JumpRequest:Connect(function()
@@ -1161,7 +1161,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 
 	RunService:BindToRenderStep("AimLock", Enum.RenderPriority.First.Value, function()
 		local s, e = pcall(function()
-			if enabled then
+			if enabled and typeData.lock then
 				local target
 				local bp
 				local magnitude = math.huge
@@ -1212,10 +1212,12 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 				if magnitude <= typeData.magnitude then
 					if target then
 						if target.Character then
-							local charPos = target.Character[bp].CFrame.Position
-							local pos = camera.CFrame.Position
+							if target.Character:FindFirstChild(bp) then
+								local charPos = target.Character[bp].CFrame.Position
+								local pos = camera.CFrame.Position
 
-							camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), math.abs(typeData.smoothness - 9) / 10)
+								camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), math.abs(typeData.smoothness - 9) / 10)			
+							end
 						end
 					end
 				end
@@ -1271,6 +1273,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							if connection and not enabled then
 								connection:Disconnect()
 								connection = nil
+
+								return
 							end
 
 							local team = player.Team
@@ -1403,8 +1407,10 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 
 	local function create(character)
 		repeat task.wait() until character:FindFirstChild("HumanoidRootPart")
+		task.wait()
 
 		local hrp = character:FindFirstChild("HumanoidRootPart")
+
 		if hrp then
 			if oldBv then
 				oldBv:Destroy()
@@ -1440,10 +1446,12 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 		local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 		if character:FindFirstChild("Humanoid") then
-			if enabled and oldBv then
-				oldBv:Destroy()
-				enabled = false
-				oldBv = nil
+			if enabled then
+				if oldBv then
+					oldBv:Destroy()
+					enabled = false
+					oldBv = nil
+				end
 
 				typeData.noclip = false
 			else
