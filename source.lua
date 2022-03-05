@@ -1291,6 +1291,9 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 						local teamCon
 
 						local function respawn(char)
+							local head = char:FindFirstChild("Head")
+
+							if not head then return end	
 							if teamCon then
 								teamCon:Disconnect()
 							end
@@ -1324,7 +1327,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
-							gui.Parent = char:WaitForChild("Head")
+							gui.Parent = head
 
 							name.BackgroundTransparency = 1
 							name.TextWrapped = true
