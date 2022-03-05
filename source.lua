@@ -1307,7 +1307,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
-							gui.Parent = char.Head
+							gui.Parent = char:WaitForChild("Head")
 
 							name.BackgroundTransparency = 1
 							name.TextWrapped = true
@@ -1348,7 +1348,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							end)
 						end
 
-						respawn(character)
+						task.spawn(respawn, character)
 						connection = player.CharacterAdded:Connect(respawn)
 					end
 				end
