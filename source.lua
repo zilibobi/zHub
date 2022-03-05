@@ -1400,7 +1400,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 					color = team.TeamColor
 				end
 
-				char:WaitForChild("Humanoid").DisplayDistanceType  = Enum.HumanoidDisplayDistanceType.None
+				char:WaitForChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 
 				local gui = Instance.new("BillboardGui")
 				local name = Instance.new("TextLabel")
