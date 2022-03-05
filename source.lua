@@ -1353,7 +1353,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							table.insert(trash, gui)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
-									if not char:FindFirstChild("Humanoid") then break end
 									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 									task.wait()
 								end
@@ -1373,7 +1372,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 						end
 
 						task.spawn(respawn, character)
-						connection = player.CharacterAdded:Connect(respawn)
+						connection = player.CharacterAdded:Connect(function(char) task.spawn(respawn, char) end)
 					end
 				end
 			end
@@ -1432,7 +1431,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				table.insert(trash, gui)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
-						if not char:FindFirstChild("Humanoid") then break end
 						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 						task.wait()
 					end
