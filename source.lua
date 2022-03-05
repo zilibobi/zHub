@@ -1269,7 +1269,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				if player.Character and player ~= Players.LocalPlayer then
 					local character = player.Character
 
-					if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
+					if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Head") then
 						local connection
 						local teamCon
 
