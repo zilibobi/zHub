@@ -1224,7 +1224,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 								local pos = camera.CFrame.Position
 
 								if pos and charPos and camera then
-									camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), math.abs(typeData.smoothness - 9) / 10)			
+									camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), typeData.smoothness * (typeData.smoothness / 100))		
 								end
 							end
 						end
@@ -1288,6 +1288,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 							local team = player.Team
 							local lTeam = Players.LocalPlayer.Team
+							local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 							local color = BrickColor.new("White")
 
@@ -1312,10 +1313,10 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							name.AnchorPoint = Vector2.new(0.5, 0.5)
 							name.Position = UDim2.fromScale(0.5, 0.5)
 							name.Size = UDim2.fromScale(10, 1)
-							name.Font = Enum.Font.GothamSemibold
+							name.Font = Enum.Font.Code
 							name.TextStrokeTransparency = 0
 							name.TextColor = color
-							name.Text = player.Name
+							name.Text = player.Name .. string.format("\n[ %s%s ]", player:IsFriendsWith(Players.LocalPlayer.UserId) and "Friend, " or "", (char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude .. " Studs Away")
 							name.Parent = gui
 
 							size.MinSize = Vector2.new(1000, 10)
