@@ -1146,14 +1146,16 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 	local diedConnection
 
 	UserInputService.InputBegan:Connect(function(input)
+		if input.KeyCode.Name == typeData.toggleGui then
+			screen.Enabled = not screen.Enabled
+		end
+
 		if input.UserInputType.Name == "MouseButton1" and typeData.toggleAimlock == "LeftMouseButton" then
 			enabled = true
 		elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
 			enabled = true
 		elseif input.UserInputType.Name == typeData.toggleAimlock then
 			enabled = true
-		elseif input.UserInputType.Name == typeData.toggleGui then
-			screen.Enabled = not screen.Enabled
 		end
 	end)
 
