@@ -1269,7 +1269,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				if player.Character and player ~= Players.LocalPlayer then
 					local character = player.Character
 
-					if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") then
+					if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
 						local connection
 						local teamCon
 
@@ -1303,11 +1303,11 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local size = Instance.new("UISizeConstraint")
 
 							gui.Name = "nametag"
-							gui.Size = UDim2.fromScale(4, 1.5)
+							gui.Size = UDim2.fromScale(6, 1.5)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
-							gui.Parent = char:WaitForChild("Head")
+							gui.Parent = char.Head
 
 							name.BackgroundTransparency = 1
 							name.TextWrapped = true
@@ -1330,7 +1330,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
 									if not char:FindFirstChild("Humanoid") then break end
-									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. char.Humanoid.Health)
+									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 									task.wait()
 								end
 							end)
@@ -1383,7 +1383,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				local size = Instance.new("UISizeConstraint")
 
 				gui.Name = "nametag"
-				gui.Size = UDim2.fromScale(4, 1.5)
+				gui.Size = UDim2.fromScale(6, 1.5)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
 				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
@@ -1409,7 +1409,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
 						if not char:FindFirstChild("Humanoid") then break end
-						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. char.Humanoid.Health)
+						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 						task.wait()
 					end
 				end)
