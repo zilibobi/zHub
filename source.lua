@@ -1276,6 +1276,10 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 			for index, gui in pairs(trash) do
 				if gui:IsDescendantOf(workspace) then
+					if gui.Parent.Parent:FindFirstChild("Humanoid") then
+						gui.Parent.Parent.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+					end
+
 					gui:Destroy()
 				else
 					trash[index] = nil
@@ -1295,6 +1299,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 						local teamCon
 
 						local function respawn(char)
+							task.wait(1)
 							local head = char:FindFirstChild("Head")
 
 							if not head then return end	
@@ -1327,7 +1332,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local size = Instance.new("UISizeConstraint")
 
 							gui.Name = "nametag"
-							gui.Size = UDim2.fromScale(6, 1.5)
+							gui.Size = UDim2.fromScale(10, 1.5)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
@@ -1406,7 +1411,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				local size = Instance.new("UISizeConstraint")
 
 				gui.Name = "nametag"
-				gui.Size = UDim2.fromScale(6, 1.5)
+				gui.Size = UDim2.fromScale(10, 1.5)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
 				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
