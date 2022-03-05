@@ -42,7 +42,6 @@ end
 
 local screen = Instance.new("ScreenGui")
 screen.DisplayOrder = math.huge
-screen.OnTopOfCoreBlur = true
 screen.IgnoreGuiInset = true
 screen.ResetOnSpawn = false
 
@@ -1291,39 +1290,50 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 							local color = BrickColor.new("White")
+							local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
 
 							if team then
 								color = team.TeamColor
 							end
+
+							char:WaitForChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 
 							local gui = Instance.new("BillboardGui")
 							local name = Instance.new("TextLabel")
 							local size = Instance.new("UISizeConstraint")
 
 							gui.Name = "nametag"
-							gui.Size = UDim2.fromScale(1, 1)
+							gui.Size = UDim2.fromScale(4, 1.5)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
-							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 2, 0)
+							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 							gui.Parent = char:WaitForChild("Head")
 
 							name.BackgroundTransparency = 1
 							name.TextWrapped = true
 							name.TextScaled = true
+							name.RichText = true
 							name.AnchorPoint = Vector2.new(0.5, 0.5)
 							name.Position = UDim2.fromScale(0.5, 0.5)
-							name.Size = UDim2.fromScale(10, 1)
+							name.Size = UDim2.fromScale(1, 1)
 							name.Font = Enum.Font.Code
 							name.TextStrokeTransparency = 0
 							name.TextColor = color
-							name.Text = player.Name .. string.format("\n[ %s%s ]", player:IsFriendsWith(Players.LocalPlayer.UserId) and "Friend, " or "", (char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude .. " Studs Away")
+
 							name.Parent = gui
 
-							size.MinSize = Vector2.new(1000, 10)
-							size.MaxSize = Vector2.new(1000, 20)
+							size.MinSize = Vector2.new(200, 30)
+							size.MaxSize = Vector2.new(200, 35)
 							size.Parent = name
 
 							table.insert(trash, gui)
+							task.spawn(function()
+								while gui:IsDescendantOf(workspace) do
+									if not char:FindFirstChild("Humanoid") then break end
+									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. char.Humanoid.Health)
+									task.wait()
+								end
+							end)
 
 							teamCon = player:GetPropertyChangedSignal("Team"):Connect(function()
 								local newTeam = player.Team
@@ -1357,41 +1367,52 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 				local team = player.Team
 				local lTeam = Players.LocalPlayer.Team
+				local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 				local color = BrickColor.new("White")
+				local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
 
 				if team then
 					color = team.TeamColor
 				end
+
+				char:WaitForChild("Humanoid").DisplayDistanceType  = Enum.HumanoidDisplayDistanceType.None
 
 				local gui = Instance.new("BillboardGui")
 				local name = Instance.new("TextLabel")
 				local size = Instance.new("UISizeConstraint")
 
 				gui.Name = "nametag"
-				gui.Size = UDim2.fromScale(1, 1)
+				gui.Size = UDim2.fromScale(4, 1.5)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
-				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 2, 0)
+				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 				gui.Parent = char:WaitForChild("Head")
 
 				name.BackgroundTransparency = 1
 				name.TextWrapped = true
 				name.TextScaled = true
+				name.RichText = true
 				name.AnchorPoint = Vector2.new(0.5, 0.5)
 				name.Position = UDim2.fromScale(0.5, 0.5)
-				name.Size = UDim2.fromScale(10, 1)
-				name.Font = Enum.Font.GothamSemibold
+				name.Size = UDim2.fromScale(1, 1)
+				name.Font = Enum.Font.Code
 				name.TextStrokeTransparency = 0
 				name.TextColor = color
-				name.Text = player.Name
 				name.Parent = gui
 
-				size.MinSize = Vector2.new(1000, 10)
-				size.MaxSize = Vector2.new(1000, 20)
+				size.MinSize = Vector2.new(200, 30)
+				size.MaxSize = Vector2.new(200, 35)
 				size.Parent = name
 
 				table.insert(trash, gui)
+				task.spawn(function()
+					while gui:IsDescendantOf(workspace) do
+						if not char:FindFirstChild("Humanoid") then break end
+						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. char.Humanoid.Health)
+						task.wait()
+					end
+				end)
 
 				teamCon = player:GetPropertyChangedSignal("Team"):Connect(function()
 					local newTeam = player.Team
