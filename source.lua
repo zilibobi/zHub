@@ -1152,6 +1152,8 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 			enabled = true
 		elseif input.UserInputType.Name == typeData.toggleAimlock then
 			enabled = true
+		elseif input.UserInputType.Name == typedata.toggleGui then
+			screen.Enabled = not screen.Enabled
 		end
 	end)
 
@@ -1524,6 +1526,7 @@ end)
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Settings
 
+addType(sc, "input", "Toggle GUI", "toggleGui", "F8")
 addType(sc, "input", "Fly Forward", "forward", "W")
 addType(sc, "input", "Fly Left", "left", "A")
 addType(sc, "input", "Fly Backward", "backward", "S")
