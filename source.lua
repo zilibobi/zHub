@@ -1152,7 +1152,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 			enabled = true
 		elseif input.UserInputType.Name == typeData.toggleAimlock then
 			enabled = true
-		elseif input.UserInputType.Name == typedata.toggleGui then
+		elseif input.UserInputType.Name == typeData.toggleGui then
 			screen.Enabled = not screen.Enabled
 		end
 	end)
