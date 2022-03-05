@@ -1195,10 +1195,17 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 
 							if p2 then
 								local rotated = CFrame.lookAt(p1.Position, p2.Position)
+								local blacklist = {}
+
+								for index, pp in ipairs(Players:GetPlayers()) do
+									if pp.Character and pp ~= Players.LocalPlayer then
+										table.insert(blacklist, pp.Character)	
+									end
+								end
 
 								local params = RaycastParams.new()
 								params.FilterType = Enum.RaycastFilterType.Blacklist
-								params.FilterDescendantsInstances = { player.Character }
+								params.FilterDescendantsInstances = blacklist
 								params.IgnoreWater = true
 
 								local result = workspace:Raycast(p1.Position, rotated.LookVector * 200, params)
@@ -1214,7 +1221,9 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 												diedConnection = nil
 											end
 
-											randomData[target] = nil
+											if target then
+												randomData[target] = nil
+											end
 										end)	
 									end
 								end
