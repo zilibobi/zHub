@@ -1223,7 +1223,9 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 								local charPos = target.Character[bp].CFrame.Position
 								local pos = camera.CFrame.Position
 
-								camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), math.abs(typeData.smoothness - 9) / 10)			
+								if pos and charPos and camera then
+									camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), math.abs(typeData.smoothness - 9) / 10)			
+								end
 							end
 						end
 					end
