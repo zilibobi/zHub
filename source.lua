@@ -1181,24 +1181,39 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 					local team = Players.LocalPlayer.Team or "team"
 					local team2 = player.Team or "team1"
 
-					if player ~= Players.LocalPlayer and team ~= team2 then
-						if player.Character and Players.LocalPlayer.Character then
+					if player ~= Players.LocalPlayer and team ~= team2 and player.Character and Players.LocalPlayer.Character  then
+						if player.Character:FindFirstChild("Head") then
 							local mousePos = UserInputService:GetMouseLocation()
 							local point = camera:WorldToViewportPoint(player.Character.Head.Position)
 							local charPos = Vector2.new(point.X, point.Y)
+							local p1 = player.Character.Head
+							local p2 = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 
-							if (charPos - mousePos).Magnitude < magnitude and player.Character.Humanoid.Health > 0 then
-								magnitude = (charPos - mousePos).Magnitude
-								target = player
+							if p2 then
+								local rotated = CFrame.lookAt(p1.Position, p2.Position)
 
-								diedConnection = player.Character.Humanoid.Died:Connect(function()
-									if diedConnection then
-										diedConnection:Disconnect()
-										diedConnection = nil
+								local params = RaycastParams.new()
+								params.FilterType = Enum.RaycastFilterType.Blacklist
+								params.FilterDescendantsInstances = { player.Character }
+								params.IgnoreWater = true
+
+								local result = workspace:Raycast(p1.Position, rotated.LookVector * 200, params)
+
+								if (charPos - mousePos).Magnitude < magnitude and player.Character.Humanoid.Health > 0 and result then
+									if result.Instance:IsDescendantOf(Players.LocalPlayer.Character) then
+										magnitude = (charPos - mousePos).Magnitude
+										target = player
+
+										diedConnection = player.Character.Humanoid.Died:Connect(function()
+											if diedConnection then
+												diedConnection:Disconnect()
+												diedConnection = nil
+											end
+
+											randomData[target] = nil
+										end)	
 									end
-
-									randomData[target] = nil
-								end)
+								end
 							end
 						end
 					end
@@ -1218,8 +1233,10 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 				if magnitude <= typeData.magnitude then
 					if target then
 						if target.Character then
-							if target.Character:FindFirstChild(bp) then
-								local charPos = target.Character[bp].CFrame.Position
+							local p = target.Character:FindFirstChild(bp)
+
+							if p then
+								local charPos = p.Position
 								local pos = camera.CFrame.Position
 
 								if pos and charPos and camera then
