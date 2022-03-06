@@ -1412,6 +1412,9 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 		player.CharacterAdded:Connect(function(char)
 			if enabled then
+				task.wait(1)
+				if not char:FindFirstChild("Head") or not char:FindFirstChild("Humanoid") then return end
+
 				if teamCon then
 					teamCon:Disconnect()
 				end
@@ -1426,7 +1429,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 					color = team.TeamColor
 				end
 
-				char:WaitForChild("Humanoid").DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+				char.Humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 
 				local gui = Instance.new("BillboardGui")
 				local name = Instance.new("TextLabel")
@@ -1437,7 +1440,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
 				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
-				gui.Parent = char:WaitForChild("Head")
+				gui.Parent = char.Head
 
 				name.BackgroundTransparency = 1
 				name.TextWrapped = true
