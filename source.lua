@@ -1367,14 +1367,14 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 									for index, tool in ipairs(player.Backpack:GetChildren()) do
 										if tool:IsA("Tool") then
 											total += 1
-											table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
+											table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 										end
 									end
 
 									if char:FindFirstChildOfClass("Tool") then
 										total += 1
 										local tool = char:FindFirstChildOfClass("Tool")
-										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
+										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 									end
 
 									tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
