@@ -1180,17 +1180,28 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 					diedConnection:Disconnect()
 					diedConnection = nil
 				end
+		
+				if typeData.aimPart == "Random" then
+					if randomData[target] then
+						bp = randomData[target]
+					else
+						bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
+						randomData[target] = bp
+					end
+				else
+					bp = typeData.aimPart
+				end
 
 				for index, player in pairs(Players:GetChildren()) do
 					local team = Players.LocalPlayer.Team or "team"
 					local team2 = player.Team or "team1"
 
-					if player ~= Players.LocalPlayer and team ~= team2 and player.Character and Players.LocalPlayer.Character  then
-						if player.Character:FindFirstChild("Head") then
+					if player ~= Players.LocalPlayer and team ~= team2 and player.Character and Players.LocalPlayer.Character then
+						if player.Character:FindFirstChild(bp) then
 							local mousePos = UserInputService:GetMouseLocation()
 							local point = camera:WorldToViewportPoint(player.Character.Head.Position)
 							local charPos = Vector2.new(point.X, point.Y)
-							local p1 = player.Character.Head
+							local p1 = player.Character[bp]
 							local p2 = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 
 							if p2 then
@@ -1230,17 +1241,6 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 							end
 						end
 					end
-				end
-
-				if typeData.aimPart == "Random" then
-					if randomData[target] then
-						bp = randomData[target]
-					else
-						bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
-						randomData[target] = bp
-					end
-				else
-					bp = typeData.aimPart
 				end
 
 				if magnitude <= typeData.magnitude then
@@ -1325,7 +1325,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 							local team = player.Team
 							local lTeam = Players.LocalPlayer.Team
-							local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 							local color = BrickColor.new("White")
 							local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
@@ -1367,6 +1366,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							table.insert(trash, gui)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
+									local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 									task.wait()
 								end
@@ -1404,7 +1404,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 				local team = player.Team
 				local lTeam = Players.LocalPlayer.Team
-				local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 				local color = BrickColor.new("White")
 				local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
@@ -1445,6 +1444,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				table.insert(trash, gui)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
+						local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
 						task.wait()
 					end
