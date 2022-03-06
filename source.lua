@@ -1361,8 +1361,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 							name.Parent = gui
 
-							size.MinSize = Vector2.new(230, 30)
-							size.MaxSize = Vector2.new(230, 35)
+							size.MinSize = Vector2.new(240, 30)
+							size.MaxSize = Vector2.new(240, 35)
 							size.Parent = name
 
 							table.insert(trash, gui)
@@ -1468,8 +1468,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				name.TextColor = color
 				name.Parent = gui
 
-				size.MinSize = Vector2.new(230, 30)
-				size.MaxSize = Vector2.new(230, 35)
+				size.MinSize = Vector2.new(240, 30)
+				size.MaxSize = Vector2.new(240, 35)
 				size.Parent = name
 
 				table.insert(trash, gui)
