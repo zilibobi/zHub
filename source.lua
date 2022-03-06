@@ -475,14 +475,14 @@ local function addType(parent, name, titleName, index, default, func)
 
 				if mousePosition.X < min then
 					fill.Size = UDim2.fromScale(0, 1)
-					typeData[index] = 0
+					typeData[index] = default.min
 				elseif mousePosition.X > max then
 					fill.Size = UDim2.fromScale(1, 1)
-					typeData[index] = 1 * amplitude
+					typeData[index] = default.max
 				else
 					local size = (mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
 
-					typeData[index] = size * amplitude
+					typeData[index] = math.clamp(size * amplitude, default.min, default.max)
 					fill.Size = UDim2.fromScale(size, 1)
 				end
 
@@ -1271,7 +1271,7 @@ end)
 addType(vc, "dropdown", "Toggle", "toggleAimlock", { starting = "RightMouseButton", options = { "RightMouseButton", "LeftMouseButton", "MouseMovement" } })
 
 addType(vc, "slider", "Smoothness", "smoothness", { start = 4, min = 1, max = 10 })
-addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 40, max = 200 })
+addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 5, max = 200 })
 
 addType(vc, "dropdown", "Aim Part", "aimPart", { starting = "Head", options = { "Head", "HumanoidRootPart", "Random" } })
 
@@ -1340,9 +1340,11 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local size = Instance.new("UISizeConstraint")
 
 							gui.Name = "nametag"
-							gui.Size = UDim2.fromScale(10, 1.5)
+							gui.Size = UDim2.fromScale(20, 1.5)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
+							gui.DistanceUpperLimit = 25
+							gui.DistanceLowerLimit = 50
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 							gui.Parent = head
 
@@ -1359,29 +1361,39 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 							name.Parent = gui
 
-							size.MinSize = Vector2.new(200, 30)
-							size.MaxSize = Vector2.new(200, 35)
+							size.MinSize = Vector2.new(230, 30)
+							size.MaxSize = Vector2.new(230, 35)
 							size.Parent = name
 
 							table.insert(trash, gui)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
 									local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-									local tools = {}
+									local magnitude = math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude)
+									local list = {}
+									local total = 0
+									local tools
 
 									for index, tool in ipairs(player.Backpack:GetChildren()) do
 										if tool:IsA("Tool") then
-											table.insert(tools, tool.Name)			
+											total += 1
+											table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
 										end
 									end
 
 									if char:FindFirstChildOfClass("Tool") then
-										table.insert(tools, char:FindFirstChildOfClass("Tool").Name)				
+										total += 1
+										local tool = char:FindFirstChildOfClass("Tool")
+										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
 									end
 
-									tools = table.concat(tools, ", ")
+									tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
 
-									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), typeData.tools and "\n[ Tools: " .. #tools ~= 0 and tools or "None" .. " ]" or "")
+									if total > 3 then
+										tools = tools .. " +" .. total - 3 .. " more" 				
+									end
+
+									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]%s</font>", friends and "Friend, " or "", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
 									task.wait()
 								end
 							end)
@@ -1436,9 +1448,11 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				local size = Instance.new("UISizeConstraint")
 
 				gui.Name = "nametag"
-				gui.Size = UDim2.fromScale(10, 1.5)
+				gui.Size = UDim2.fromScale(20, 1.5)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
+				gui.DistanceUpperLimit = 25
+				gui.DistanceLowerLimit = 50
 				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 				gui.Parent = char.Head
 
@@ -1454,29 +1468,39 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				name.TextColor = color
 				name.Parent = gui
 
-				size.MinSize = Vector2.new(200, 30)
-				size.MaxSize = Vector2.new(200, 35)
+				size.MinSize = Vector2.new(230, 30)
+				size.MaxSize = Vector2.new(230, 35)
 				size.Parent = name
 
 				table.insert(trash, gui)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
 						local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-						local tools = {}
+						local magnitude = math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude)
+						local list = {}
+						local total = 0
+						local tools
 
 						for index, tool in ipairs(player.Backpack:GetChildren()) do
 							if tool:IsA("Tool") then
-								table.insert(tools, tool.Name)			
+								total += 1
+								table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
 							end
 						end
 
 						if char:FindFirstChildOfClass("Tool") then
-							table.insert(tools, char:FindFirstChildOfClass("Tool").Name)				
+							total += 1
+							local tool = char:FindFirstChildOfClass("Tool")
+							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
 						end
 
-						tools = table.concat(tools, ", ")
+						tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
 
-						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), typeData.tools and "\n[ Tools: " .. #tools ~= 0 and tools or "None" .. " ]" or "")
+						if total > 3 then
+							tools = tools .. " +" .. total - 3 .. " more" 				
+						end
+
+						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]%s</font>", friends and "Friend, " or "", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
 						task.wait()
 					end
 				end)
@@ -1498,6 +1522,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 end)
 
 addType(vc, "checkbox", "Show Tools", "tools", false)
+addType(vc, "slider", "Show Tools At", "showat", { start = 20, min = 10, max = 500 })
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Trolling
 
