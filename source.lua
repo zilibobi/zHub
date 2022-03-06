@@ -1367,7 +1367,21 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
 									local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
+									local tools = {}
+
+									for index, tool in ipairs(player.Backpack:GetChildren()) do
+										if tool:IsA("Tool") then
+											table.insert(tools, tool.Name)			
+										end
+									end
+
+									if char:FindFirstChildOfClass("Tool") then
+										table.insert(tools, char:FindFirstChildOfClass("Tool").Name)				
+									end
+
+									tools = table.concat(tools, ", ")
+
+									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), typeData.tools and "\n[ Tools: " .. #tools ~= 0 and tools or "None" .. " ]" or "")
 									task.wait()
 								end
 							end)
@@ -1445,7 +1459,21 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
 						local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health))
+						local tools = {}
+
+						for index, tool in ipairs(player.Backpack:GetChildren()) do
+							if tool:IsA("Tool") then
+								table.insert(tools, tool.Name)			
+							end
+						end
+
+						if char:FindFirstChildOfClass("Tool") then
+							table.insert(tools, char:FindFirstChildOfClass("Tool").Name)				
+						end
+
+						tools = table.concat(tools, ", ")
+
+						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s%s ]</font>", friends and "Friend, " or "", math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude) .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), typeData.tools and "\n[ Tools: " .. #tools ~= 0 and tools or "None" .. " ]" or "")
 						task.wait()
 					end
 				end)
@@ -1465,6 +1493,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 		end)
 	end)
 end)
+
+addType(vc, "checkbox", "Show Tools", "tools", false)
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Trolling
 
