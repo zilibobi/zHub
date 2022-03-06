@@ -1180,17 +1180,6 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 					diedConnection:Disconnect()
 					diedConnection = nil
 				end
-		
-				if typeData.aimPart == "Random" then
-					if randomData[target] then
-						bp = randomData[target]
-					else
-						bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
-						randomData[target] = bp
-					end
-				else
-					bp = typeData.aimPart
-				end
 
 				for index, player in pairs(Players:GetChildren()) do
 					local team = Players.LocalPlayer.Team or "team"
@@ -1205,6 +1194,17 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 							local p2 = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 
 							if p2 then
+								if typeData.aimPart == "Random" then
+									if randomData[player] then
+										bp = randomData[player]
+									else
+										bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
+										randomData[player] = bp
+									end
+								else
+									bp = typeData.aimPart
+								end
+
 								local rotated = CFrame.lookAt(p1.Position, p2.Position)
 								local blacklist = {}
 
