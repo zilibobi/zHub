@@ -1327,7 +1327,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local lTeam = Players.LocalPlayer.Team
 
 							local color = BrickColor.new("White")
-							local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
 
 							if team then
 								color = team.TeamColor
@@ -1386,7 +1385,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 										tools = tools .. " +" .. total - 3 .. " more" 				
 									end
 
-									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]%s</font>", friends and "Friend, " or "", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
+									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s ]%s</font>", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
 									task.wait()
 								end
 							end)
@@ -1417,8 +1416,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 		player.CharacterAdded:Connect(function(char)
 			if enabled then
-				task.wait(2)
-				if not char:FindFirstChild("Head") or not char:FindFirstChild("Humanoid") then return end
+				if not char:WaitForChild("Head", 10) or not char:WaitForChild("Humanoid", 10) then return end
 
 				if teamCon then
 					teamCon:Disconnect()
