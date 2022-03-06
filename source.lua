@@ -1339,6 +1339,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							local name = Instance.new("TextLabel")
 
 							gui.Name = "nametag"
+							gui.LightInfluence = 0
 							gui.Size = UDim2.fromOffset(1000, 40)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
@@ -1358,6 +1359,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							table.insert(trash, gui)
 							task.spawn(function()
 								while gui:IsDescendantOf(workspace) do
+									gui.MaxDistance = typeData.espat
+
 									local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 									local magnitude = math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude)
 									local list = {}
@@ -1437,6 +1440,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				local name = Instance.new("TextLabel")
 
 				gui.Name = "nametag"
+				gui.LightInfluence = 0
 				gui.Size = UDim2.fromOffset(1000, 40)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
@@ -1456,6 +1460,8 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				table.insert(trash, gui)
 				task.spawn(function()
 					while gui:IsDescendantOf(workspace) do
+						gui.MaxDistance = typeData.espat
+
 						local localChar = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 						local magnitude = math.floor((char.Head.Position - localChar:WaitForChild("Head").Position).Magnitude)
 						local list = {}
@@ -1504,6 +1510,7 @@ end)
 
 addType(vc, "checkbox", "Show Tools", "tools", false)
 addType(vc, "slider", "Show Tools At", "showat", { start = 20, min = 10, max = 500 })
+addType(vc, "slider", "Show ESP At", "espat", { start = 300, min = 50, max = 1500 })
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Trolling
 
