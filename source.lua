@@ -1186,6 +1186,17 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 					local team2 = player.Team or "team1"
 
 					if player ~= Players.LocalPlayer and team ~= team2 and player.Character and Players.LocalPlayer.Character then
+						if typeData.aimPart == "Random" then
+							if randomData[player] then
+								bp = randomData[player]
+							else
+								bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
+								randomData[player] = bp
+							end
+						else
+							bp = typeData.aimPart
+						end
+
 						if player.Character:FindFirstChild(bp) then
 							local mousePos = UserInputService:GetMouseLocation()
 							local point = camera:WorldToViewportPoint(player.Character.Head.Position)
@@ -1194,17 +1205,6 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 							local p2 = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 
 							if p2 then
-								if typeData.aimPart == "Random" then
-									if randomData[player] then
-										bp = randomData[player]
-									else
-										bp = math.random(1, 2) == 1 and "Head" or "HumanoidRootPart"
-										randomData[player] = bp
-									end
-								else
-									bp = typeData.aimPart
-								end
-
 								local rotated = CFrame.lookAt(p1.Position, p2.Position)
 								local blacklist = {}
 
