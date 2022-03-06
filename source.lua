@@ -1417,7 +1417,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 		player.CharacterAdded:Connect(function(char)
 			if enabled then
-				task.wait(1)
+				task.wait(2)
 				if not char:FindFirstChild("Head") or not char:FindFirstChild("Humanoid") then return end
 
 				if teamCon then
