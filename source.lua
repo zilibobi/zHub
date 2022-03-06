@@ -1337,33 +1337,23 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 							local gui = Instance.new("BillboardGui")
 							local name = Instance.new("TextLabel")
-							local size = Instance.new("UISizeConstraint")
 
 							gui.Name = "nametag"
-							gui.Size = UDim2.fromScale(20, 1.5)
+							gui.Size = UDim2.fromOffset(1000, 40)
 							gui.AlwaysOnTop = true
 							gui.ResetOnSpawn = false
-							gui.DistanceUpperLimit = 25
-							gui.DistanceLowerLimit = 50
 							gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 							gui.Parent = head
 
 							name.BackgroundTransparency = 1
-							name.TextWrapped = true
-							name.TextScaled = true
+							name.TextSize = 14
 							name.RichText = true
-							name.AnchorPoint = Vector2.new(0.5, 0.5)
-							name.Position = UDim2.fromScale(0.5, 0.5)
 							name.Size = UDim2.fromScale(1, 1)
 							name.Font = Enum.Font.Code
+							name.TextYAlignment = Enum.TextYAlignment.Top
 							name.TextStrokeTransparency = 0
 							name.TextColor = color
-
 							name.Parent = gui
-
-							size.MinSize = Vector2.new(240, 30)
-							size.MaxSize = Vector2.new(240, 35)
-							size.Parent = name
 
 							table.insert(trash, gui)
 							task.spawn(function()
@@ -1445,32 +1435,23 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 
 				local gui = Instance.new("BillboardGui")
 				local name = Instance.new("TextLabel")
-				local size = Instance.new("UISizeConstraint")
 
 				gui.Name = "nametag"
-				gui.Size = UDim2.fromScale(20, 1.5)
+				gui.Size = UDim2.fromOffset(1000, 40)
 				gui.AlwaysOnTop = true
 				gui.ResetOnSpawn = false
-				gui.DistanceUpperLimit = 25
-				gui.DistanceLowerLimit = 50
 				gui.ExtentsOffsetWorldSpace = Vector3.new(0, 3, 0)
 				gui.Parent = char.Head
 
 				name.BackgroundTransparency = 1
-				name.TextWrapped = true
-				name.TextScaled = true
 				name.RichText = true
-				name.AnchorPoint = Vector2.new(0.5, 0.5)
-				name.Position = UDim2.fromScale(0.5, 0.5)
 				name.Size = UDim2.fromScale(1, 1)
 				name.Font = Enum.Font.Code
+				name.TextYAlignment = Enum.TextYAlignment.Top
 				name.TextStrokeTransparency = 0
+				name.TextSize = 14
 				name.TextColor = color
 				name.Parent = gui
-
-				size.MinSize = Vector2.new(240, 30)
-				size.MaxSize = Vector2.new(240, 35)
-				size.Parent = name
 
 				table.insert(trash, gui)
 				task.spawn(function()
@@ -1484,14 +1465,14 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 						for index, tool in ipairs(player.Backpack:GetChildren()) do
 							if tool:IsA("Tool") then
 								total += 1
-								table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
+								table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 							end
 						end
 
 						if char:FindFirstChildOfClass("Tool") then
 							total += 1
 							local tool = char:FindFirstChildOfClass("Tool")
-							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and ".." or ""))			
+							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 						end
 
 						tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
