@@ -1117,7 +1117,9 @@ addType(cc, "slider", "CFWalk Speed", "cfWalkSpeed", { start = 16, min = 0, max 
 end)
 
 addType(cc, "checkbox", "Inf Jump", "infJump", false)
-addType(cc, "checkbox", "Velocity Jump", "vjump", false)
+addType(cc, "checkbox", "Velocity Jump", "vjump", false, function(check)
+	character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not typeData.vjump)
+end)
 
 addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
 	local lastJump = 0
