@@ -1117,11 +1117,14 @@ addType(cc, "slider", "CFWalk Speed", "cfWalkSpeed", { start = 16, min = 0, max 
 end)
 
 addType(cc, "checkbox", "Inf Jump", "infJump", false)
+addType(cc, "checkbox", "Velocity Jump", "vjump", false)
 
-addType(cc, "slider", "Jump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
+addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
 	local lastJump = 0
 
 	UserInputService.JumpRequest:Connect(function()
+		if not typeData.vjump then return end
+
 		local ct = tick()
 		local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
