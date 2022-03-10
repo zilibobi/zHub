@@ -28,6 +28,15 @@ local infoPresets = {
 	["Quint"] = TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
 }
 
+local colors = {
+	main = Color3.fromRGB(30, 30, 30),
+	mainLight = Color3.fromRGB(35, 35, 35),
+	secondary = Color3.fromRGB(25, 25, 25),
+	light = Color3.fromRGB(20, 20, 20),
+	accent = Color3.fromRGB(43, 177, 255),
+	darkAccent = Color3.fromRGB(34, 140, 202)
+}
+
 local mouse = Players.LocalPlayer:GetMouse()
 local camera = workspace.CurrentCamera
 
@@ -41,7 +50,7 @@ local function tween(obj, info, goal, yield)
 end
 
 local screen = Instance.new("ScreenGui")
-screen.DisplayOrder = math.huge
+screen.DisplayOrder = 100
 screen.IgnoreGuiInset = true
 screen.ResetOnSpawn = false
 
@@ -80,7 +89,7 @@ desc1.FontSize = Enum.FontSize.Size14
 desc1.TextSize = 14
 desc1.RichText = true
 desc1.TextColor3 = Color3.fromRGB(255, 255, 255)
-desc1.Text = "zHub is distributed under the <b>Creative Commons BY-NC 4.0 International</b> license.\n\nYou can use the script as long as you provide attribution and don't use it for commercial purposes.\n\n<font size=\"15\">Examples of what you <b>can</b> do:</font>\n\n\u{2022} Use the script for personal use\n\u{2022} Use the script for a non-commercial project (with attribution)\n\u{2022} Modify the script to use for non-commercial purposes (with attribution)\n\n<font size=\"15\">Examples of what you <b>cannot</b> do:</font>\n\n\u{2022} Use the script for commercial purposes\n\u{2022} Distribute the script (without attribution)\n\nThese examples do not replace the actual terms.\n\n<font color=\"#66a9cc\">https://creativecommons.org/licenses/by-nc/4.0/legalcode</font>\n\nIf you have any questions regarding the license and the terms, message me on Discord - zilibobi#8836."
+desc1.Text = "zHub is distributed under the <b>Creative Commons BY-NC 4.0 International</b> license.\n\nYou can use the script as long as you provide attribution and don't use it for commercial purposes.\n\n<font size=\"15\">Examples of what you <b>can</b> do:</font>\n\n\u{2022} Use the script for personal use\n\u{2022} Use the script for a non-commercial project (with attribution)\n\u{2022} Modify the script to use for non-commercial purposes (with attribution)\n\n<font size=\"15\">Examples of what you <b>cannot</b> do:</font>\n\n\u{2022} Use the script for commercial purposes\n\u{2022} Distribute the script (without attribution)\n\nThese examples do not replace the actual terms.\n\n<font color=\"#" .. colors.accent:ToHex() .. "\">https://creativecommons.org/licenses/by-nc/4.0/legalcode</font>\n\nIf you have any questions regarding the license and the terms, message me on Discord - zilibobi#8836."
 desc1.TextYAlignment = Enum.TextYAlignment.Top
 desc1.TextWrap = true
 desc1.Font = Enum.Font.GothamSemibold
@@ -95,16 +104,16 @@ split1.ZIndex = 2
 split1.Size = UDim2.new(1, 0, 0, 2)
 split1.Position = UDim2.new(0.5, 0, 0, 21)
 split1.BorderSizePixel = 0
-split1.BackgroundColor3 = Color3.fromRGB(68, 68, 68)
+split1.BackgroundColor3 = colors.mainLight
 split1.Parent = legal
 
 local gui = Instance.new("Frame")
 gui.Name = "gui"
 gui.AnchorPoint = Vector2.new(0.5, 0.5)
 gui.ZIndex = 2
-gui.Size = UDim2.new(0, 482, 0, 292)
+gui.Size = UDim2.new(0, 482, 0, 308)
 gui.Position = UDim2.new(0.8393939, 0, 0.4263393, 0)
-gui.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+gui.BackgroundColor3 = colors.main
 gui.Parent = screen
 
 local padding2 = Instance.new("UIPadding")
@@ -158,7 +167,7 @@ pages.Size = UDim2.new(0.686, 0, 1, 0)
 pages.ClipsDescendants = true
 pages.Position = UDim2.new(1, 0, 1, 0)
 pages.BorderSizePixel = 0
-pages.BackgroundColor3 = Color3.fromRGB(53, 53, 53)
+pages.BackgroundColor3 = colors.secondary
 pages.Parent = gui
 
 local corner4 = Instance.new("UICorner")
@@ -220,7 +229,7 @@ local function addType(parent, name, titleName, index, default, func)
 		checkbox.Name = "checkbox"
 		checkbox.ZIndex = 2
 		checkbox.Size = UDim2.new(1, 0, 0, 35)
-		checkbox.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+		checkbox.BackgroundColor3 = colors.main
 		checkbox.Parent = parent
 
 		local corner5 = Instance.new("UICorner")
@@ -256,7 +265,7 @@ local function addType(parent, name, titleName, index, default, func)
 		check.ZIndex = 2
 		check.Size = UDim2.new(0, 23, 1, 0)
 		check.Position = UDim2.new(1, 0, 0, 0)
-		check.BackgroundColor3 = default and Color3.fromRGB(102, 168, 203) or Color3.fromRGB(55, 55, 55)
+		check.BackgroundColor3 = default and colors.accent or colors.secondary
 		check.AutoButtonColor = false
 		check.Parent = checkbox
 
@@ -269,21 +278,21 @@ local function addType(parent, name, titleName, index, default, func)
 
 		check.MouseEnter:Connect(function()
 			hovering = true
-			tween(check, infoPresets.DefaultFast, { BackgroundColor3 = typeData[index] == true and Color3.fromRGB(84, 140, 168) or Color3.fromRGB(59, 59, 59) })
+			tween(check, infoPresets.DefaultFast, { BackgroundColor3 = typeData[index] == true and colors.darkAccent or colors.light })
 		end)
 
 		check.MouseLeave:Connect(function()
 			hovering = false
-			tween(check, infoPresets.DefaultFast, { BackgroundColor3 = typeData[index] == true and Color3.fromRGB(102, 168, 203) or Color3.fromRGB(55, 55, 55) })
+			tween(check, infoPresets.DefaultFast, { BackgroundColor3 = typeData[index] == true and colors.accent or colors.secondary })
 		end)
 
 		check.MouseButton1Click:Connect(function()
 			typeData[index] = not typeData[index]
 
 			if not hovering then
-				tween(check, infoPresets.DefaultQuick, { BackgroundColor3 = typeData[index] == true and Color3.fromRGB(102, 168, 203) or Color3.fromRGB(59, 59, 59) })
+				tween(check, infoPresets.DefaultQuick, { BackgroundColor3 = typeData[index] == true and colors.accent or colors.secondary })
 			else
-				tween(check, infoPresets.DefaultQuick, { BackgroundColor3 = typeData[index] == true and Color3.fromRGB(84, 140, 168) or Color3.fromRGB(55, 55, 55) })
+				tween(check, infoPresets.DefaultQuick, { BackgroundColor3 = typeData[index] == true and colors.darkAccent or colors.light })
 			end
 		end)
 
@@ -299,7 +308,7 @@ local function addType(parent, name, titleName, index, default, func)
 		input.Name = "input"
 		input.ZIndex = 2
 		input.Size = UDim2.new(1, 0, 0, 35)
-		input.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+		input.BackgroundColor3 = colors.main
 		input.Parent = parent
 
 		local corner7 = Instance.new("UICorner")
@@ -335,7 +344,7 @@ local function addType(parent, name, titleName, index, default, func)
 		change.ZIndex = 2
 		change.Size = UDim2.new(0, 100, 1, 0)
 		change.Position = UDim2.new(1, 0, 0, 0)
-		change.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+		change.BackgroundColor3 = colors.secondary
 		change.AutoButtonColor = false
 		change.FontSize = Enum.FontSize.Size12
 		change.TextSize = 12
@@ -353,11 +362,11 @@ local function addType(parent, name, titleName, index, default, func)
 		reservedKeys[default] = index
 
 		change.MouseEnter:Connect(function()
-			tween(change, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(59, 59, 59) })
+			tween(change, infoPresets.DefaultFast, { BackgroundColor3 = colors.light })
 		end)
 
 		change.MouseLeave:Connect(function()
-			tween(change, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(55, 55, 55) })
+			tween(change, infoPresets.DefaultFast, { BackgroundColor3 = colors.secondary })
 		end)
 
 		change.MouseButton1Click:Connect(function()
@@ -374,6 +383,10 @@ local function addType(parent, name, titleName, index, default, func)
 						typeData[index] = input.KeyCode.Name
 						reservedKeys[input.KeyCode.Name] = index
 						change.Text = input.KeyCode.Name
+
+						if input.KeyCode.Name == typeData.toggleGui then
+							screen.Enabled = not screen.Enabled
+						end
 
 						task.wait(0.5)
 						changable = false
@@ -394,7 +407,7 @@ local function addType(parent, name, titleName, index, default, func)
 		slider.Name = "slider"
 		slider.ZIndex = 2
 		slider.Size = UDim2.new(1, 0, 0, 35)
-		slider.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+		slider.BackgroundColor3 = colors.main
 		slider.Parent = parent
 
 		local corner9 = Instance.new("UICorner")
@@ -432,7 +445,7 @@ local function addType(parent, name, titleName, index, default, func)
 		bar.Position = UDim2.new(1, 0, 0, 0)
 		bar.AutoButtonColor = false
 		bar.Image = ""
-		bar.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+		bar.BackgroundColor3 = colors.secondary
 		bar.Parent = slider
 
 		local corner10 = Instance.new("UICorner")
@@ -444,7 +457,7 @@ local function addType(parent, name, titleName, index, default, func)
 		fill.BorderSizePixel = 0
 		fill.ZIndex = 2
 		fill.Size = UDim2.new(default.start / amplitude, 0, 1, 0)
-		fill.BackgroundColor3 = Color3.fromRGB(102, 168, 203)
+		fill.BackgroundColor3 = colors.accent
 		fill.Parent = bar
 
 		local corner11 = Instance.new("UICorner")
@@ -513,7 +526,7 @@ local function addType(parent, name, titleName, index, default, func)
 		dropdown.Size = UDim2.new(1, 0, 0, 35)
 		dropdown.ClipsDescendants = true
 		dropdown.Position = UDim2.new(0, 0, 0.3075, 0)
-		dropdown.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+		dropdown.BackgroundColor3 = colors.main
 		dropdown.Parent = parent
 
 		local corner12 = Instance.new("UICorner")
@@ -551,7 +564,7 @@ local function addType(parent, name, titleName, index, default, func)
 		open.Size = UDim2.new(0, 23, 0, 23)
 		open.Position = UDim2.new(1, 0, 0, 0)
 		open.BorderSizePixel = 0
-		open.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+		open.BackgroundColor3 = colors.main
 		open.AutoButtonColor = false
 		open.FontSize = Enum.FontSize.Size18
 		open.TextSize = 16
@@ -582,10 +595,9 @@ local function addType(parent, name, titleName, index, default, func)
 			option.Name = "option"
 			option.ZIndex = 2
 			option.Size = UDim2.new(1, 0, 0, 25)
-			option.BackgroundColor3 = Color3.fromRGB(63, 63, 63)
+			option.BackgroundColor3 = colors.main
 			option.BorderSizePixel = 0
 			option.AutoButtonColor = false
-			option.FontSize = Enum.FontSize.Size14
 			option.TextSize = 14
 			option.TextColor3 = Color3.fromRGB(255, 255, 255)
 			option.Text = optionName
@@ -599,28 +611,28 @@ local function addType(parent, name, titleName, index, default, func)
 
 			if optionName == default.starting then
 				selected = option
-				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(80, 80, 80) })
+				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 			end
 
 			option.MouseEnter:Connect(function()
 				if typeData[index] ~= optionName then
-					tween(option, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(70, 70, 70) })
+					tween(option, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 				end
 			end)
 
 			option.MouseLeave:Connect(function()
-				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = selected ~= option and Color3.fromRGB(63, 63, 63) or Color3.fromRGB(80, 80, 80) })
+				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = selected ~= option and colors.main or colors.mainLight })
 			end)
 
 			option.MouseButton1Click:Connect(function()
 				if selected then
-					tween(selected, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(63, 63, 63)})
+					tween(selected, infoPresets.DefaultFast, { BackgroundColor3 = colors.main })
 				end
 
 				selected = option
 				typeData[index] = optionName
 
-				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(80, 80, 80) })
+				tween(option, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 			end)
 		end
 
@@ -632,11 +644,11 @@ local function addType(parent, name, titleName, index, default, func)
 		list1.Parent = options
 
 		open.MouseEnter:Connect(function()
-			tween(open, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(70, 70, 70) })
+			tween(open, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 		end)
 
 		open.MouseLeave:Connect(function()
-			tween(open, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(63, 63, 63) })
+			tween(open, infoPresets.DefaultFast, { BackgroundColor3 = colors.main })
 		end)
 
 		open.MouseButton1Click:Connect(function()
@@ -677,7 +689,7 @@ sidebar.Name = "sidebar"
 sidebar.Selectable = true
 sidebar.ZIndex = 2
 sidebar.Size = UDim2.new(0.3, 0, 1, 0)
-sidebar.BackgroundColor3 = Color3.fromRGB(53, 53, 53)
+sidebar.BackgroundColor3 = colors.secondary
 sidebar.Parent = gui
 
 local corner13 = Instance.new("UICorner")
@@ -698,7 +710,7 @@ navbar.Name = "navbar"
 navbar.Selectable = false
 navbar.AnchorPoint = Vector2.new(0, 1)
 navbar.ZIndex = 2
-navbar.Size = UDim2.new(1, 0, 0, 200)
+navbar.Size = UDim2.new(1, 0, 0, 215)
 navbar.BackgroundTransparency = 1
 navbar.Position = UDim2.new(0, 0, 1, 0)
 navbar.BorderSizePixel = 0
@@ -737,7 +749,7 @@ local function addNavbarButtons(data)
 		button.LayoutOrder = 3
 		button.ZIndex = 2
 		button.Size = UDim2.new(1, 0, 0, 30)
-		button.BackgroundColor3 = index == 1 and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(63, 63, 63)
+		button.BackgroundColor3 = index == 1 and colors.mainLight or colors.main
 		button.AutoButtonColor = false
 		button.FontSize = Enum.FontSize.Size14
 		button.TextSize = 13
@@ -756,22 +768,22 @@ local function addNavbarButtons(data)
 		corner14.Parent = button
 
 		button.MouseEnter:Connect(function()
-			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(70, 70, 70) })
+			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 		end)
 
 		button.MouseLeave:Connect(function()
-			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = currentButton ~= button and Color3.fromRGB(63, 63, 63) or Color3.fromRGB(80, 80, 80) })
+			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = currentButton ~= button and colors.main or colors.mainLight })
 		end)
 
 		button.MouseButton1Click:Connect(function()
 			if currentButton then
-				tween(currentButton, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(63, 63, 63) })
+				tween(currentButton, infoPresets.DefaultFast, { BackgroundColor3 = colors.main })
 			end
 
 			currentButton = button
 			pageLayout:JumpTo(pageData.page)
 
-			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = Color3.fromRGB(80, 80, 80) })
+			tween(button, infoPresets.DefaultFast, { BackgroundColor3 = colors.mainLight })
 		end)
 	end
 end
@@ -1118,7 +1130,13 @@ end)
 
 addType(cc, "checkbox", "Inf Jump", "infJump", false)
 addType(cc, "checkbox", "Velocity Jump", "vjump", false, function(check)
-	character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not typeData.vjump)
+	check.MouseButton1Click:Connect(function()
+		local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
+		if character:FindFirstChild("Humanoid") then
+			character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not typeData.vjump)
+		end		
+	end)
 end)
 
 addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
