@@ -486,18 +486,10 @@ local function addType(parent, name, titleName, index, default, func)
 				local min = bar.AbsolutePosition.X
 				local max = bar.AbsolutePosition.X + bar.AbsoluteSize.X
 
-				if mousePosition.X < min then
-					fill.Size = UDim2.fromScale(0, 1)
-					typeData[index] = default.min
-				elseif mousePosition.X > max then
-					fill.Size = UDim2.fromScale(1, 1)
-					typeData[index] = default.max
-				else
-					local size = (mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X
+				local size = math.clamp(((mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X) * amplitude, default.min, default.max) / amplitude
 
-					typeData[index] = math.clamp(size * amplitude, default.min, default.max)
-					fill.Size = UDim2.fromScale(size, 1)
-				end
+				typeData[index] = math.clamp(size * amplitude, default.min, default.max)
+				fill.Size = UDim2.fromScale(size, 1)
 
 				value.Text = math.floor(typeData[index])
 			end
@@ -1113,9 +1105,9 @@ end)
 
 addType(cc, "checkbox", "CFrame Walk", "cfWalk", false)
 
-addType(cc, "slider", "Fly Speed", "flySpeed", { start = 50, min = 0, max = 150 })
+addType(cc, "slider", "Fly Speed", "flySpeed", { start = 50, min = 5, max = 300 })
 
-addType(cc, "slider", "CFWalk Speed", "cfWalkSpeed", { start = 16, min = 0, max = 200 }, function()
+addType(cc, "slider", "CFWalk Speed", "cfWalkSpeed", { start = 16, min = 5, max = 300 }, function()
 	RunService:BindToRenderStep("CFWalkSpeed", Enum.RenderPriority.First.Value, function()
 		if typeData.cfWalk then
 			local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
@@ -1139,7 +1131,7 @@ addType(cc, "checkbox", "Velocity Jump", "vjump", false, function(check)
 	end)
 end)
 
-addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 0, max = 350 }, function()
+addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace.Gravity / 4), min = 5, max = 300 }, function()
 	local lastJump = 0
 
 	UserInputService.JumpRequest:Connect(function()
@@ -1159,7 +1151,7 @@ addType(cc, "slider", "VJump Power", "jumpPower", { start = math.floor(workspace
 	end)
 end)
 
-addType(cc, "slider", "Jump Cooldown", "jumpCooldown", { start = 0, min = 0, max = 20 })
+addType(cc, "slider", "Jump Cooldown", "jumpCooldown", { start = 0, min = 0, max = 5 })
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Visual
 
@@ -1177,7 +1169,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 			enabled = true
 		elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
 			enabled = true
-		elseif input.UserInputType.Name == typeData.toggleAimlock then
+		elseif input.UserInputType.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
 			enabled = true
 		end
 	end)
@@ -1187,7 +1179,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 			enabled = false
 		elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
 			enabled = false
-		elseif input.UserInputType.Name == typeData.toggleAimlock then
+		elseif input.UserInputType.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
 			enabled = false
 		end
 	end)
@@ -1204,7 +1196,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 					diedConnection = nil
 				end
 
-				for index, player in pairs(Players:GetChildren()) do
+				for index, player in ipairs(Players:GetChildren()) do
 					local team = Players.LocalPlayer.Team or "team"
 					local team2 = player.Team or "team1"
 
@@ -1291,10 +1283,10 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 	end)
 end)
 
-addType(vc, "dropdown", "Toggle", "toggleAimlock", { starting = "RightMouseButton", options = { "RightMouseButton", "LeftMouseButton", "MouseMovement" } })
+addType(vc, "dropdown", "Toggle", "toggleAimlock", { starting = "RightMouseButton", options = { "RightMouseButton", "LeftMouseButton", "Custom" } })
 
 addType(vc, "slider", "Smoothness", "smoothness", { start = 4, min = 1, max = 10 })
-addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 5, max = 200 })
+addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 30, max = 300 })
 
 addType(vc, "dropdown", "Aim Part", "aimPart", { starting = "Head", options = { "Head", "HumanoidRootPart", "Random" } })
 
@@ -1402,10 +1394,10 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 									end
 
-									tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
+									tools = table.concat(list, ", ", 1, math.clamp(#list, 0, typeData.toolsamount))
 
-									if total > 3 then
-										tools = tools .. " +" .. total - 3 .. " more" 				
+									if total > typeData.toolsamount then
+										tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more" 				
 									end
 
 									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s ]%s</font>", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
@@ -1449,7 +1441,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				local lTeam = Players.LocalPlayer.Team
 
 				local color = BrickColor.new("White")
-				local friends = player:IsFriendsWith(Players.LocalPlayer.UserId)
 
 				if team then
 					color = team.TeamColor
@@ -1502,13 +1493,13 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
 						end
 
-						tools = table.concat(list, ", ", 1, math.clamp(#list, 0, 3))
+						tools = table.concat(list, ", ", 1, math.clamp(#list, 0, typeData.toolsamount))
 
-						if total > 3 then
-							tools = tools .. " +" .. total - 3 .. " more" 				
+						if total > typeData.toolsamount then
+							tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more" 				
 						end
 
-						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s%s ]%s</font>", friends and "Friend, " or "", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
+						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s ]%s</font>", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
 						task.wait()
 					end
 				end)
@@ -1530,8 +1521,9 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 end)
 
 addType(vc, "checkbox", "Show Tools", "tools", false)
-addType(vc, "slider", "Show Tools At", "showat", { start = 20, min = 10, max = 500 })
-addType(vc, "slider", "Show ESP At", "espat", { start = 300, min = 50, max = 1500 })
+addType(vc, "slider", "# of tools", "toolsamount", { start = 4, min = 1, max = 10 })
+addType(vc, "slider", "Show Tools At", "showat", { start = 20, min = 20, max = 500 })
+addType(vc, "slider", "Show ESP At", "espat", { start = 300, min = 20, max = 1500 })
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Trolling
 
@@ -1608,6 +1600,7 @@ end)
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Settings
 
 addType(sc, "input", "Toggle GUI", "toggleGui", "F8")
+addType(sc, "input", "Custom AimLock Key", "aimlockkey", "LeftControl")
 addType(sc, "input", "Fly Forward", "forward", "W")
 addType(sc, "input", "Fly Left", "left", "A")
 addType(sc, "input", "Fly Backward", "backward", "S")
