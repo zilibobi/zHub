@@ -12,6 +12,7 @@ _G.zHubLoaded = true
 
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
@@ -1296,8 +1297,31 @@ addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 30, max = 30
 addType(vc, "dropdown", "Aim Part", "aimPart", { starting = "Head", options = { "Head", "HumanoidRootPart", "Random" } })
 
 addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
-	check.MouseButton1Click:Connect(function()
+	local x, y = 0, 0
+
+	local function moved(name, state, input)
+		x = x - input.Delta.X * 0.4
+		y = math.clamp(y - input.Delta.Y * 0.4, -80, 80)
+	end
+
+	mouse.Button2Down:Connect(function()
+		if not typeData.freecam then return end
+		UserInputService.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+	end)
+
+	mouse.Button2Up:Connect(function()
+		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+	end)
+
+	local function respawn()
+		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
 		if not typeData.freecam then
+			if char:FindFirstChild("HumanoidRootPart") then
+				char.HumanoidRootPart.Anchored = true
+			end
+
+			ContextActionService:BindAction("MouseMovement", moved, false, Enum.UserInputType.MouseMovement, Enum.UserInputType.Touch)
 			RunService:BindToRenderStep("Freecam", Enum.RenderPriority.First.Value, function()
 				camera.CameraType = Enum.CameraType.Scriptable
 
@@ -1317,15 +1341,27 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 					end
 				end
 
-				camera.CFrame *= CFrame.new(pos * 0.5)
+				camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position) * CFrame.new(pos * 0.5) * CFrame.Angles(0, math.rad(x), 0) * CFrame.Angles(math.rad(y), 0, 0), 0.35)
 			end)	
 		else
+			if char:FindFirstChild("HumanoidRootPart") then
+				char.HumanoidRootPart.Anchored = false
+			end
+
 			RunService:UnbindFromRenderStep("Freecam")
+			ContextActionService:UnindAction("MouseMovement")
+			camera.CameraType = Enum.CameraType.Custom
 		end
+	end
+
+	check.MouseButton1Click:Connect(function()
+		respawn()
 	end)
+
+	Players.LocalPlayer.CharacterAdded:Connect(respawn)
 end)
 
-addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 50, min = 5, max = 300 })
+addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 15, min = 5, max = 100 })
 
 addType(vc, "checkbox", "ESP", "esp", false, function(check)
 	local enabled = false
