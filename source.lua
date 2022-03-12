@@ -1327,10 +1327,10 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 
 				local pos = Vector3.new()
 				local directions = {
-					[typeData.forward] = Vector3.new(0, 0, -1) * typeData.freecamSpeed,
-					[typeData.left] = Vector3.new(-1, 0, 0) * typeData.freecamSpeed,
-					[typeData.backward] = Vector3.new(0, 0, 1) * typeData.freecamSpeed,
-					[typeData.right] = Vector3.new(1, 0, 0) * typeData.freecamSpeed,
+					[typeData.forward] = camera.CFrame.LookVector * typeData.freecamSpeed,
+					[typeData.left] = camera.CFrame.RightVector * (-typeData.freecamSpeed),
+					[typeData.backward] = camera.CFrame.LookVector * (-typeData.freecamSpeed),
+					[typeData.right] = camera.CFrame.RightVector * typeData.freecamSpeed,
 					[typeData.up] = Vector3.new(0, typeData.freecamSpeed, 0),
 					[typeData.down] = Vector3.new(0, -typeData.freecamSpeed, 0),
 				}
@@ -1361,7 +1361,17 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 	Players.LocalPlayer.CharacterAdded:Connect(respawn)
 end)
 
-addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 15, min = 5, max = 100 })
+addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 8, min = 5, max = 100 })
+
+addType(vc, "checkbox", "XRay", "xray", false, function(check)
+	check.MouseButton1Click:Connect(function()
+		for index, part in ipairs(workspace:GetDescendants()) do
+			if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+				part.LocalTransparencyModifier = typeData.xray and 0.65 or 0
+			end
+		end
+	end)
+end)
 
 addType(vc, "checkbox", "ESP", "esp", false, function(check)
 	local enabled = false
