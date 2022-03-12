@@ -1019,85 +1019,16 @@ addType(cc, "checkbox", "CFrame Fly", "cframeFly", false, function()
 end)
 
 addType(cc, "checkbox", "Noclip", "noclip", false, function(check)
-	local con
-
-	check.MouseButton1Click:Connect(function()
-		if typeData.noclip then
-			con = RunService.Stepped:Connect(function()
-				local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
-
-				for index, part in ipairs(char:GetChildren()) do
-					if part:IsA("BasePart") then
-						part.CanCollide = false
-					end
-				end
-			end)
-		else
-			if con then
-				con:Disconnect()
-				con = nil
-			end
-		end
-	end)
-end)
-
-addType(cc, "checkbox", "Invisible", "invisible", false, function(check)
-	local seat
-
-	local function respawn(char, manual)
-		task.spawn(function()
-			if not typeData.invisible and not manual then return end
-			task.wait(0.2)
-
-			if seat then
-				seat:Destroy()
-				seat = nil
-			end
-
-			if char then
-				if char:WaitForChild("HumanoidRootPart", 10) then
-					local oldPos = char.HumanoidRootPart.Position
-					char.HumanoidRootPart.CFrame = CFrame.new(0, 100000, 0)
-
-					task.wait(0.2)
-
-					seat = Instance.new("Seat")
-					seat.Transparency = 1
-					seat.Position = oldPos
-					seat.Size = Vector3.new(3, 1, 1)
-					seat.Parent = workspace
-
-					local w1, w2 = Instance.new("Weld"), Instance.new("Weld")
-					w1.Part0 = char.HumanoidRootPart
-					w1.Part1 = seat
-					w1.Parent = seat
-
-					w2.Parent = char.HumanoidRootPart
-					w2.Part0 = char.HumanoidRootPart
-					w2.Part1 = seat
-				end
-			end
-		end)
-	end
-
-	check.MouseButton1Click:Connect(function()
+	RunService.Stepped:Connect(function()
 		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
-		if not typeData.invisible then
-			respawn(char, true)
-		else
-			if seat then
-				local pos = char:GetPrimaryPartCFrame()
-
-				seat:Destroy()
-				seat = nil
-
-				char:SetPrimaryPartCFrame(pos)
+		for index, part in ipairs(char:GetChildren()) do
+			if part:IsA("BasePart") then
+				part.CanCollide = not typeData.noclip
+				part.Transparency = typeData.invisible and 0.65 or 0
 			end
 		end
 	end)
-
-	Players.LocalPlayer.CharacterAdded:Connect(respawn)
 end)
 
 addType(cc, "checkbox", "Float", "float", false, function(check)
@@ -1664,6 +1595,65 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 			end
 		end
 	end)
+end)
+
+addType(tc, "checkbox", "Invisible", "invisible", false, function(check)
+	local seat
+
+	local function respawn(char, manual)
+		task.spawn(function()
+			if not typeData.invisible and not manual then return end
+			task.wait(0.2)
+
+			if seat then
+				seat:Destroy()
+				seat = nil
+			end
+
+			if char then
+				if char:WaitForChild("HumanoidRootPart", 10) then
+					local oldPos = char.HumanoidRootPart.Position
+					char.HumanoidRootPart.CFrame = CFrame.new(0, 100000, 0)
+
+					task.wait(0.2)
+
+					seat = Instance.new("Seat")
+					seat.Transparency = 1
+					seat.Position = oldPos
+					seat.Size = Vector3.new(3, 1, 1)
+					seat.Parent = workspace
+
+					local w1, w2 = Instance.new("Weld"), Instance.new("Weld")
+					w1.Part0 = char.HumanoidRootPart
+					w1.Part1 = seat
+					w1.Parent = seat
+
+					w2.Parent = char.HumanoidRootPart
+					w2.Part0 = char.HumanoidRootPart
+					w2.Part1 = seat
+				end
+			end
+		end)
+	end
+
+	check.MouseButton1Click:Connect(function()
+		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
+		if not typeData.invisible then
+			respawn(char, true)
+		else
+			if seat then
+				local pos = char:GetPrimaryPartCFrame()
+
+				seat:Destroy()
+				seat = nil
+
+				char:SetPrimaryPartCFrame(pos)
+			end
+		end
+	end)
+
+	Players.LocalPlayer.CharacterAdded:Connect(respawn)
 end)
 
 --//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--// Commands | Settings
