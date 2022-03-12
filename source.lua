@@ -1317,7 +1317,7 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 					end
 				end
 
-				camera.CFrame = CFrame.new(pos * 0.5)
+				camera.CFrame *= CFrame.new(pos * 0.5)
 			end)	
 		else
 			RunService:UnbindFromRenderStep("Freecam")
