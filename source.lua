@@ -1022,10 +1022,13 @@ addType(cc, "checkbox", "Noclip", "noclip", false, function(check)
 	RunService.Stepped:Connect(function()
 		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
-		for index, part in ipairs(char:GetChildren()) do
+		for index, part in ipairs(char:GetDescendants()) do
 			if part:IsA("BasePart") then
 				part.CanCollide = not typeData.noclip
-				part.Transparency = typeData.invisible and 0.65 or 0
+
+				if part.Name ~= "HumanoidRootPart" then
+					part.Transparency = typeData.invisible and 0.65 or 0		
+				end
 			end
 		end
 	end)
