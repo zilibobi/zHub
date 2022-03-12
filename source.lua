@@ -1018,89 +1018,158 @@ addType(cc, "checkbox", "CFrame Fly", "cframeFly", false, function()
 	end)
 end)
 
-addType(cc, "checkbox", "Noclip", "noclip", false, function()
-	RunService.Stepped:Connect(function()
-		if typeData.noclip then
-			local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+addType(cc, "checkbox", "Noclip", "noclip", false, function(check)
+	local con
 
-			for index, part in ipairs(char:GetChildren()) do
-				if part:IsA("BasePart") then
-					part.CanCollide = false
+	check.MouseButton1Click:Connect(function()
+		if typeData.noclip then
+			con = RunService.Stepped:Connect(function()
+				local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
+				for index, part in ipairs(char:GetChildren()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = false
+					end
 				end
+			end)
+		else
+			if con then
+				con:Disconnect()
+				con = nil
 			end
 		end
 	end)
 end)
 
 addType(cc, "checkbox", "Invisible", "invisible", false, function(check)
-	local touched = false
-	local invisible = false
-	local loc
+	local seat
 
-	local part = Instance.new("Part")
-	part.Anchored = true
-	part.Transparency = 1
-	part.Size = Vector3.new(10, 1, 10)
-	part.Position = Vector3.new(0, 100000, 0)
-	part.Parent = workspace
+	local function respawn(char, manual)
+		task.spawn(function()
+			if not typeData.invisible and not manual then return end
+			task.wait(0.2)
 
-	part.Touched:Connect(function(hit)
-		if hit and invisible then
-			if hit.Parent.Name == Players.LocalPlayer.Name then
-				if not touched then
-					touched = true
+			if seat then
+				seat:Destroy()
+				seat = nil
+			end
 
-					if Players.LocalPlayer.Character then
-						if Players.LocalPlayer.Character.Humanoid.RigType == Enum.HumanoidRigType.R6 then
-							local root = Players.LocalPlayer.Character.HumanoidRootPart:Clone()
-							task.wait(0.25)
+			if char then
+				if char:WaitForChild("HumanoidRootPart", 10) then
+					local oldPos = char.HumanoidRootPart.Position
+					char.HumanoidRootPart.CFrame = CFrame.new(0, 100000, 0)
 
-							Players.LocalPlayer.Character.HumanoidRootPart:Destroy()
-							root.Parent = Players.LocalPlayer.Character
-							Players.LocalPlayer.Character:MoveTo(loc + Vector3.new(0, 5, 0))
+					task.wait(0.2)
 
-							touched = false
-						else
-							local root = Players.LocalPlayer.Character.LowerTorso.Root:Clone()
-							task.wait(0.25)
+					seat = Instance.new("Seat")
+					seat.Transparency = 1
+					seat.Position = oldPos
+					seat.Size = Vector3.new(3, 1, 1)
+					seat.Parent = workspace
 
-							Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
-							root.Parent = Players.LocalPlayer.Character
-							Players.LocalPlayer.Character:MoveTo(loc + Vector3.new(0, 5, 0))
+					local w1, w2 = Instance.new("Weld"), Instance.new("Weld")
+					w1.Part0 = char.HumanoidRootPart
+					w1.Part1 = seat
+					w1.Parent = seat
 
-							touched = false
-						end
-					end
+					w2.Parent = char.HumanoidRootPart
+					w2.Part0 = char.HumanoidRootPart
+					w2.Part1 = seat
 				end
 			end
-		end
-	end)
+		end)
+	end
 
 	check.MouseButton1Click:Connect(function()
-		repeat task.wait() until Players.LocalPlayer.Character
-		repeat task.wait() until Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
-		local root = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-
-		if not invisible then
-			invisible = true
-			loc = Players.LocalPlayer.Character.HumanoidRootPart.Position
-			Players.LocalPlayer.Character:MoveTo(part.Position + Vector3.new(0, 5, 0))
+		if not typeData.invisible then
+			respawn(char, true)
 		else
-			invisible = false
-			Players.LocalPlayer.Character:BreakJoints()
+			if seat then
+				local pos = char:GetPrimaryPartCFrame()
+
+				seat:Destroy()
+				seat = nil
+
+				char:SetPrimaryPartCFrame(pos)
+			end
 		end
+	end)
 
-		Players.LocalPlayer.CharacterAdded:Connect(function(character)
-			repeat task.wait() until character:FindFirstChild("HumanoidRootPart")
+	Players.LocalPlayer.CharacterAdded:Connect(respawn)
+end)
 
-			if invisible then
-				invisible = true
-				loc = Players.LocalPlayer.Character.HumanoidRootPart.Position
-				Players.LocalPlayer.Character:MoveTo(part.Position + Vector3.new(0, 5, 0))
+addType(cc, "checkbox", "Float", "float", false, function(check)
+	local float
+	local cons = {}
+
+	local function respawn(char, manual)
+		task.spawn(function()
+			if not typeData.float and not manual then return end
+			task.wait(0.2)
+
+			for index, con in ipairs(cons) do
+				con:Disconnect()
+			end
+
+			if float then
+				float:Destroy()
+				float = nil
+			end
+
+			if char then
+				if char:WaitForChild("HumanoidRootPart", 10) then
+					local dir = -3.5
+
+					float = Instance.new("Part")
+					float.Transparency = 1
+					float.Size = Vector3.new(5, 1, 5)
+					float.Anchored = true
+					float.Parent = workspace
+
+					cons[1] = UserInputService.InputBegan:Connect(function(input, gp)
+						if not gp and input.KeyCode == Enum.KeyCode.Q then
+							dir -= 0.5
+						elseif not gp and input.KeyCode == Enum.KeyCode.E then
+							dir += 0.5
+						end
+					end)
+
+					cons[2] = UserInputService.InputEnded:Connect(function(input, gp)
+						if not gp and input.KeyCode == Enum.KeyCode.Q then
+							dir += 0.5
+						elseif not gp and input.KeyCode == Enum.KeyCode.E then
+							dir -= 0.5
+						end
+					end)
+
+					cons[3] = RunService.RenderStepped:Connect(function()
+						float.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, dir, 0)
+					end)
+				end
 			end
 		end)
+	end
+
+	check.MouseButton1Click:Connect(function()
+		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
+		if not typeData.float then
+			respawn(char, true)
+		else
+			for index, con in ipairs(cons) do
+				con:Disconnect()
+			end
+
+			if float then
+				float:Destroy()
+				float = nil
+			end
+		end
 	end)
+
+	Players.LocalPlayer.CharacterAdded:Connect(respawn)
 end)
 
 addType(cc, "checkbox", "CFrame Walk", "cfWalk", false)
@@ -1127,7 +1196,7 @@ addType(cc, "checkbox", "Velocity Jump", "vjump", false, function(check)
 
 		if character:FindFirstChild("Humanoid") then
 			character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not typeData.vjump)
-		end		
+		end
 	end)
 end)
 
@@ -1225,7 +1294,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 
 								for index, pp in ipairs(Players:GetPlayers()) do
 									if pp.Character and pp ~= Players.LocalPlayer then
-										table.insert(blacklist, pp.Character)	
+										table.insert(blacklist, pp.Character)
 									end
 								end
 
@@ -1250,7 +1319,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 											if target then
 												randomData[target] = nil
 											end
-										end)	
+										end)
 									end
 								end
 							end
@@ -1268,7 +1337,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 								local pos = camera.CFrame.Position
 
 								if pos and charPos and camera then
-									camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), typeData.smoothness * (typeData.smoothness / 100))		
+									camera.CFrame = camera.CFrame:Lerp(CFrame.new(pos, charPos), typeData.smoothness * (typeData.smoothness / 100))
 								end
 							end
 						end
@@ -1326,7 +1395,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							task.wait(1)
 							local head = char:FindFirstChild("Head")
 
-							if not head then return end	
+							if not head then return end
 							if teamCon then
 								teamCon:Disconnect()
 							end
@@ -1384,20 +1453,20 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 									for index, tool in ipairs(player.Backpack:GetChildren()) do
 										if tool:IsA("Tool") then
 											total += 1
-											table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
+											table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))
 										end
 									end
 
 									if char:FindFirstChildOfClass("Tool") then
 										total += 1
 										local tool = char:FindFirstChildOfClass("Tool")
-										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
+										table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))
 									end
 
 									tools = table.concat(list, ", ", 1, math.clamp(#list, 0, typeData.toolsamount))
 
 									if total > typeData.toolsamount then
-										tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more" 				
+										tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more"
 									end
 
 									name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s ]%s</font>", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
@@ -1483,20 +1552,20 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 						for index, tool in ipairs(player.Backpack:GetChildren()) do
 							if tool:IsA("Tool") then
 								total += 1
-								table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
+								table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))
 							end
 						end
 
 						if char:FindFirstChildOfClass("Tool") then
 							total += 1
 							local tool = char:FindFirstChildOfClass("Tool")
-							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))			
+							table.insert(list, tool.Name:sub(1, 7) .. (#tool.Name > 7 and "..." or ""))
 						end
 
 						tools = table.concat(list, ", ", 1, math.clamp(#list, 0, typeData.toolsamount))
 
 						if total > typeData.toolsamount then
-							tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more" 				
+							tools = tools .. " +" .. total - math.floor(typeData.toolsamount) .. " more"
 						end
 
 						name.Text = player.Name .. string.format("\n<font color=\"#ffffff\">[ %s%s ]%s</font>", magnitude .. " Studs Away, ", "Health: " .. math.floor(char.Humanoid.Health), (typeData.tools and #list ~= 0 and magnitude <= typeData.showat) and "\n[ Tools: " .. tools .. " ]" or "")
@@ -1540,7 +1609,7 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 		task.wait(1)
 		queue = false
 
-		if not typeData.fling then return end			
+		if not typeData.fling then return end
 
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 
