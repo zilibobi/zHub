@@ -1295,6 +1295,38 @@ addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 30, max = 30
 
 addType(vc, "dropdown", "Aim Part", "aimPart", { starting = "Head", options = { "Head", "HumanoidRootPart", "Random" } })
 
+addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
+	check.MouseButton1Click:Connect(function()
+		if not typeData.freecam then
+			RunService:BindToRenderStep("Freecam", Enum.RenderPriority.First.Value, function()
+				camera.CameraType = Enum.CameraType.Scriptable
+
+				local pos = Vector3.new()
+				local directions = {
+					[typeData.forward] = Vector3.new(0, 0, -1) * typeData.freecamSpeed,
+					[typeData.left] = Vector3.new(-1, 0, 0) * typeData.freecamSpeed,
+					[typeData.backward] = Vector3.new(0, 0, 1) * typeData.freecamSpeed,
+					[typeData.right] = Vector3.new(1, 0, 0) * typeData.freecamSpeed,
+					[typeData.up] = Vector3.new(0, typeData.freecamSpeed, 0),
+					[typeData.down] = Vector3.new(0, -typeData.freecamSpeed, 0),
+				}
+
+				for key, dir in pairs(directions) do
+					if UserInputService:IsKeyDown(key) then
+						pos += dir
+					end
+				end
+
+				camera.CFrame = CFrame.new(pos * 0.5)
+			end)	
+		else
+			RunService:UnbindFromRenderStep("Freecam")
+		end
+	end)
+end)
+
+addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 50, min = 5, max = 300 })
+
 addType(vc, "checkbox", "ESP", "esp", false, function(check)
 	local enabled = false
 	local trash = {}
