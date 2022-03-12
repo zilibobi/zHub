@@ -1317,12 +1317,12 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 		if not typeData.freecam then
-			if char:FindFirstChild("HumanoidRootPart") then
-				char.HumanoidRootPart.Anchored = true
-			end
-
 			ContextActionService:BindAction("MouseMovement", moved, false, Enum.UserInputType.MouseMovement, Enum.UserInputType.Touch)
 			RunService:BindToRenderStep("Freecam", Enum.RenderPriority.First.Value, function()
+				if char:FindFirstChild("HumanoidRootPart") then
+					char.HumanoidRootPart.Anchored = true
+				end
+
 				camera.CameraType = Enum.CameraType.Scriptable
 
 				local pos = Vector3.new()
@@ -1344,7 +1344,7 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 				camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position) * CFrame.new(pos * 0.5) * CFrame.Angles(0, math.rad(x), 0) * CFrame.Angles(math.rad(y), 0, 0), 0.35)
 			end)	
 		else
-			if char:FindFirstChild("HumanoidRootPart") then
+			if char:WaitForChild("HumanoidRootPart", 10) then
 				char.HumanoidRootPart.Anchored = false
 			end
 
@@ -1355,10 +1355,12 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 	end
 
 	check.MouseButton1Click:Connect(function()
-		respawn()
+		task.spawn(respawn)
 	end)
 
-	Players.LocalPlayer.CharacterAdded:Connect(respawn)
+	Players.LocalPlayer.CharacterAdded:Connect(function()
+		task.spawn(respawn)
+	end)
 end)
 
 addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 8, min = 5, max = 100 })
