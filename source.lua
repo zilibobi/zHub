@@ -1370,7 +1370,7 @@ addType(vc, "checkbox", "XRay", "xray", false, function(check)
 	check.MouseButton1Click:Connect(function()
 		for index, part in ipairs(workspace:GetDescendants()) do
 			if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-				part.LocalTransparencyModifier = not typeData.xray and 0.65 or 0
+				part.LocalTransparencyModifier = not typeData.xray and 0.25 or 0
 			end
 		end
 	end)
