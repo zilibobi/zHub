@@ -1534,6 +1534,7 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 	local oldBv = nil
 	local queue = false
 	local enabled = false
+	local con
 
 	local function create(character)
 		if queue then return end
@@ -1552,7 +1553,19 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 				oldBv:Destroy()
 			end
 
-			typeData.noclip = true
+			if con then
+				con:Disconnect()	
+			end
+
+			con = RunService.Stepped:Connect(function()
+				local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
+
+				for index, part in ipairs(char:GetDescendants()) do
+					if part:IsA("BasePart") then
+						part.CanCollide = not typeData.noclip
+					end
+				end
+			end)
 
 			local bv = Instance.new("BodyAngularVelocity")
 			bv.MaxTorque = Vector3.new(1, 1, 1) * math.huge
@@ -1573,6 +1586,11 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 	end
 
 	Players.LocalPlayer.CharacterAdded:Connect(function(character)
+		if con then
+			con:Disconnect()
+			con = nil
+		end
+
 		if typeData.fling then
 			create(character)
 
@@ -1588,13 +1606,17 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 
 		if character:FindFirstChild("Humanoid") then
 			if enabled then
+				enabled = false
+
 				if oldBv then
 					oldBv:Destroy()
-					enabled = false
 					oldBv = nil
 				end
 
-				typeData.noclip = false
+				if con then
+					con:Disconnect()
+					con = nil
+				end
 			else
 				enabled = true
 				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
