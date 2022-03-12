@@ -1575,6 +1575,11 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 	Players.LocalPlayer.CharacterAdded:Connect(function(character)
 		if typeData.fling then
 			create(character)
+
+			if character:WaitForChild("Humanoid", 10) then
+				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+				character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+			end
 		end
 	end)
 
