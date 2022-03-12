@@ -1367,12 +1367,12 @@ end)
 addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 8, min = 5, max = 100 })
 
 addType(vc, "checkbox", "XRay", "xray", false, function(check)
-	check.MouseButton1Click:Connect(function()
+	RunService.Heartbeat:Connect(function()
 		for index, part in ipairs(workspace:GetDescendants()) do
 			if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-				part.LocalTransparencyModifier = not typeData.xray and 0.25 or 0
+				part.LocalTransparencyModifier = typeData.xray and 0.35 or 0
 			end
-		end
+		end		
 	end)
 end)
 
