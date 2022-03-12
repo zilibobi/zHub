@@ -1024,10 +1024,12 @@ addType(cc, "checkbox", "Noclip", "noclip", false, function(check)
 
 		for index, part in ipairs(char:GetDescendants()) do
 			if part:IsA("BasePart") then
-				part.CanCollide = not typeData.noclip
+				if typeData.noclip and part.Parent.Name == Players.LocalPlayer.Name then
+					part.CanCollide = false	
+				end
 
-				if part.Name ~= "HumanoidRootPart" then
-					part.Transparency = typeData.invisible and 0.65 or 0		
+				if part.Transparency ~= 1 then
+					part.Transparency = typeData.invisible and 0.65 or 0
 				end
 			end
 		end
@@ -1560,9 +1562,9 @@ addType(tc, "checkbox", "Fling", "fling", false, function(check)
 			con = RunService.Stepped:Connect(function()
 				local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
-				for index, part in ipairs(char:GetDescendants()) do
+				for index, part in ipairs(char:GetChildren()) do
 					if part:IsA("BasePart") then
-						part.CanCollide = not typeData.noclip
+						part.CanCollide = false	
 					end
 				end
 			end)
