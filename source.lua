@@ -1064,17 +1064,17 @@ addType(cc, "checkbox", "Float", "float", false, function(check)
 
 					cons[1] = UserInputService.InputBegan:Connect(function(input, gp)
 						if not gp and input.KeyCode == Enum.KeyCode.Q then
-							dir -= 0.5
+							dir -= typeData.floatSpeed / 10
 						elseif not gp and input.KeyCode == Enum.KeyCode.E then
-							dir += 0.5
+							dir += typeData.floatSpeed / 10
 						end
 					end)
 
 					cons[2] = UserInputService.InputEnded:Connect(function(input, gp)
 						if not gp and input.KeyCode == Enum.KeyCode.Q then
-							dir += 0.5
+							dir += typeData.floatSpeed / 10
 						elseif not gp and input.KeyCode == Enum.KeyCode.E then
-							dir -= 0.5
+							dir -= typeData.floatSpeed / 10
 						end
 					end)
 
@@ -1109,6 +1109,7 @@ end)
 addType(cc, "checkbox", "CFrame Walk", "cfWalk", false)
 
 addType(cc, "slider", "Fly Speed", "flySpeed", { start = 50, min = 5, max = 300 })
+addType(cc, "slider", "Float Speed", "floatSpeed", { start = 5, min = 5, max = 35 })
 
 addType(cc, "slider", "CFWalk Speed", "cfWalkSpeed", { start = 16, min = 5, max = 300 }, function()
 	RunService:BindToRenderStep("CFWalkSpeed", Enum.RenderPriority.First.Value, function()
@@ -1129,7 +1130,7 @@ addType(cc, "checkbox", "Velocity Jump", "vjump", false, function(check)
 		local character = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
 		if character:FindFirstChild("Humanoid") then
-			character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, not typeData.vjump)
+			character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, typeData.vjump)
 		end
 	end)
 end)
