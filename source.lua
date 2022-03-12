@@ -1359,6 +1359,7 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 	end)
 
 	Players.LocalPlayer.CharacterAdded:Connect(function()
+		task.wait(0.2)
 		task.spawn(respawn)
 	end)
 end)
