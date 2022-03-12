@@ -1344,7 +1344,7 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 				camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position) * CFrame.new(pos * 0.5) * CFrame.Angles(0, math.rad(x), 0) * CFrame.Angles(math.rad(y), 0, 0), 0.35)
 			end)	
 		else
-			if char:WaitForChild("HumanoidRootPart", 10) then
+			if char:FindFirstChild("HumanoidRootPart") then
 				char.HumanoidRootPart.Anchored = false
 			end
 
