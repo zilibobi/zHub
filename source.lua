@@ -1029,8 +1029,8 @@ addType(cc, "checkbox", "Noclip", "noclip", false, function(check)
 					part.CanCollide = false	
 				end
 
-				if part.Transparency ~= 1 then
-					part.Transparency = typeData.invisible and 0.65 or 0
+				if part.Transparency == 0.656 or part.Transparency == 0 then
+					part.Transparency = typeData.invisible and 0.656 or 0
 				end
 			end
 		end
