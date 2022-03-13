@@ -1313,10 +1313,10 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 	end)
 
-	local function respawn()
+	local function respawn(enabled)
 		local char = Players.LocalPlayer.Character or Players.LocalPlayer.CharacterAdded:Wait()
 
-		if not typeData.freecam then
+		if enabled then
 			ContextActionService:BindAction("MouseMovement", moved, false, Enum.UserInputType.MouseMovement, Enum.UserInputType.Touch)
 			RunService:BindToRenderStep("Freecam", Enum.RenderPriority.First.Value, function()
 				if char:FindFirstChild("HumanoidRootPart") then
@@ -1355,23 +1355,42 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 	end
 
 	check.MouseButton1Click:Connect(function()
-		task.spawn(respawn)
+		task.spawn(not typeData.freecam)
 	end)
 
 	Players.LocalPlayer.CharacterAdded:Connect(function()
 		task.wait(0.2)
-		task.spawn(respawn)
+		task.spawn(respawn, typeData.freecam)
 	end)
 end)
 
 addType(vc, "slider", "Freecam Speed", "freecamSpeed", { start = 8, min = 5, max = 100 })
 
 addType(vc, "checkbox", "XRay", "xray", false, function(check)
-	RunService.Heartbeat:Connect(function()
-		for index, part in ipairs(workspace:GetDescendants()) do
-			if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-				part.LocalTransparencyModifier = typeData.xray and 0.35 or 0
+	local queue = false
+
+	check.MouseButton1Click:Connect(function()
+		if typeData.xray then
+			queue = true
+
+			for index, part in ipairs(workspace:GetDescendants()) do
+				if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+					part.LocalTransparencyModifier = 0
+				end
 			end
+	
+			queue = false
+		end
+	end)
+
+	task.spawn(function()
+		while task.wait(0.25) do
+			if not typeData.xray or queue then return end
+			for index, part in ipairs(workspace:GetDescendants()) do
+				if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+					part.LocalTransparencyModifier = 0.35
+				end
+			end	
 		end		
 	end)
 end)
