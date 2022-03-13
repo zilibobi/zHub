@@ -402,7 +402,7 @@ local function addType(parent, name, titleName, index, default, func)
 
 		local down = false
 		local queued = false
-		local amplitude = default.max - default.min
+		local amplitude = default.max
 
 		local slider = Instance.new("Frame")
 		slider.Name = "slider"
@@ -487,7 +487,7 @@ local function addType(parent, name, titleName, index, default, func)
 				local min = bar.AbsolutePosition.X
 				local max = bar.AbsolutePosition.X + bar.AbsoluteSize.X
 
-				local size = math.clamp(math.clamp(((mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X) * amplitude + default.min, default.min, default.max) / amplitude + default.min, 0, 1)
+				local size = math.clamp(math.clamp(((mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X) * amplitude, default.min, default.max) / amplitude, 0, 1)
 
 				typeData[index] = math.clamp(size * amplitude, default.min, default.max)
 				fill.Size = UDim2.fromScale(size, 1)
