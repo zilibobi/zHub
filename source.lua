@@ -1383,12 +1383,12 @@ addType(vc, "checkbox", "XRay", "xray", false, function(check)
 
 	task.spawn(function()
 		while task.wait(0.25) do
-			print(typeData.xray, queue)
-			if not typeData.xray or queue == true then return end
-			for index, part in ipairs(workspace:GetDescendants()) do
-				if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-					part.LocalTransparencyModifier = 0.4
-				end
+			if typeData.xray and not queue then
+				for index, part in ipairs(workspace:GetDescendants()) do
+					if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+						part.LocalTransparencyModifier = 0.4
+					end
+				end	
 			end	
 		end		
 	end)
