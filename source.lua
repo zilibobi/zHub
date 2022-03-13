@@ -487,7 +487,7 @@ local function addType(parent, name, titleName, index, default, func)
 				local min = bar.AbsolutePosition.X
 				local max = bar.AbsolutePosition.X + bar.AbsoluteSize.X
 
-				local size = math.clamp(((mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X) * amplitude, default.min, default.max) / amplitude
+				local size = math.clamp(math.clamp(((mousePosition.X - bar.AbsolutePosition.X) / bar.AbsoluteSize.X) * amplitude + default.min, default.min, default.max) / amplitude + default.min, 0, 1)
 
 				typeData[index] = math.clamp(size * amplitude, default.min, default.max)
 				fill.Size = UDim2.fromScale(size, 1)
@@ -1172,7 +1172,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 		end
 
 		if input.UserInputType.Name == "Keyboard" then
-			if input.KeyCode.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
+			if input.KeyCode.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom (don't need to hold)" then
 				enabled = not enabled	
 			end
 		else
@@ -1424,7 +1424,7 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 				if player.Character and player ~= Players.LocalPlayer then
 					local character = player.Character
 
-					if character:FindFirstChild("Humanoid") and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
+					if character:WaitForChild("Humanoid", 10) and character:WaitForChild("HumanoidRootPart", 10) and character:WaitForChild("Head", 10) then
 						local connection
 						local teamCon
 
@@ -1432,7 +1432,6 @@ addType(vc, "checkbox", "ESP", "esp", false, function(check)
 							task.wait(1)
 							local head = char:FindFirstChild("Head")
 
-							if not head then return end
 							if teamCon then
 								teamCon:Disconnect()
 							end
