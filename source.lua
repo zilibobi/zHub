@@ -1355,7 +1355,7 @@ addType(vc, "checkbox", "Freecam", "freecam", false, function(check)
 	end
 
 	check.MouseButton1Click:Connect(function()
-		task.spawn(not typeData.freecam)
+		task.spawn(respawn, not typeData.freecam)
 	end)
 
 	Players.LocalPlayer.CharacterAdded:Connect(function()
@@ -1370,25 +1370,24 @@ addType(vc, "checkbox", "XRay", "xray", false, function(check)
 	local queue = false
 
 	check.MouseButton1Click:Connect(function()
-		if typeData.xray then
-			queue = true
+		queue = true
 
-			for index, part in ipairs(workspace:GetDescendants()) do
-				if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-					part.LocalTransparencyModifier = 0
-				end
+		for index, part in ipairs(workspace:GetDescendants()) do
+			if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
+				part.LocalTransparencyModifier = typeData.xray and 0 or 0.35
 			end
-	
-			queue = false
 		end
+
+		queue = false
 	end)
 
 	task.spawn(function()
 		while task.wait(0.25) do
-			if not typeData.xray or queue then return end
+			print(typeData.xray, queue)
+			if not typeData.xray or queue == true then return end
 			for index, part in ipairs(workspace:GetDescendants()) do
 				if part:IsA("BasePart") and not part.Parent:FindFirstChildOfClass("Humanoid") and not part.Parent.Parent:FindFirstChildOfClass("Humanoid") then
-					part.LocalTransparencyModifier = 0.35
+					part.LocalTransparencyModifier = 0.4
 				end
 			end	
 		end		
