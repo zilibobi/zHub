@@ -1171,12 +1171,16 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 			screen.Enabled = not screen.Enabled
 		end
 
-		if input.UserInputType.Name == "MouseButton1" and typeData.toggleAimlock == "LeftMouseButton" then
-			enabled = true
-		elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
-			enabled = true
-		elseif input.UserInputType.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
-			enabled = true
+		if input.UserInputType.Name == "Keyboard" then
+			if input.KeyCode.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
+				enabled = not enabled	
+			end
+		else
+			if input.UserInputType.Name == "MouseButton1" and typeData.toggleAimlock == "LeftMouseButton" then
+				enabled = true
+			elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
+				enabled = true
+			end		
 		end
 	end)
 
@@ -1184,8 +1188,6 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 		if input.UserInputType.Name == "MouseButton1" and typeData.toggleAimlock == "LeftMouseButton" then
 			enabled = false
 		elseif input.UserInputType.Name == "MouseButton2" and typeData.toggleAimlock == "RightMouseButton" then
-			enabled = false
-		elseif input.UserInputType.Name == typeData.aimlockkey and typeData.toggleAimlock == "Custom" then
 			enabled = false
 		end
 	end)
@@ -1289,7 +1291,7 @@ addType(vc, "checkbox", "AimLock", "lock", false, function()
 	end)
 end)
 
-addType(vc, "dropdown", "Toggle", "toggleAimlock", { starting = "RightMouseButton", options = { "RightMouseButton", "LeftMouseButton", "Custom" } })
+addType(vc, "dropdown", "Toggle", "toggleAimlock", { starting = "RightMouseButton", options = { "RightMouseButton", "LeftMouseButton", "Custom (don't need to hold)" } })
 
 addType(vc, "slider", "Smoothness", "smoothness", { start = 4, min = 1, max = 10 })
 addType(vc, "slider", "Magnitude", "magnitude", { start = 80, min = 30, max = 300 })
