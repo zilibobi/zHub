@@ -1082,7 +1082,9 @@ addType(cc, "checkbox", "Float", "float", false, function(check)
 					end)
 
 					cons[3] = RunService.RenderStepped:Connect(function()
-						float.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, dir, 0)
+						if char:FindFirstChild("HumanoidRootPart") then
+							float.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, dir, 0)	
+						end
 					end)
 				end
 			end
